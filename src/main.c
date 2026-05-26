@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <GL/glut.h>
+#include <math.h>
+#define PI 3.14
 
-int px, py;
+float px, py, pdx, pdy, pa;
 
 void drawPlayer()
 {
@@ -10,6 +12,12 @@ void drawPlayer()
 	glPointSize(8);
 	glBegin(GL_POINTS);
 	glVertex2i(px, py);
+	glEnd();
+
+	glLineWidth(3);
+	glBegin(GL_LINES);
+	glVertex2i(px, py);
+	glVertex2i(px + pdx * 5, py + pdy *5);
 	glEnd();
 }
 
@@ -42,10 +50,10 @@ void drawMap2D()
 			x0 = x*mapS;
 			y0 = y*mapS;
 			glBegin(GL_QUADS);
-			glVertex2i(x0, y0);
-			glVertex2i(x0, y0 + mapS);
-			glVertex2i(x0 + mapS, y0+mapS);
-			glVertex2i(x0 + mapS, y0);
+			glVertex2i(x0+1, y0+1);
+			glVertex2i(x0+1, y0 + mapS-1);
+			glVertex2i(x0 + mapS-1, y0+mapS-1);
+			glVertex2i(x0 + mapS-1, y0+1);
 			glEnd();
 		}
 	}
@@ -62,16 +70,28 @@ void display()
 void buttons(unsigned char key, int x, int y)
 {
 	if (key == 'a') {
-		px -= 5;
+		pa -= 0.1;
+		if (pa < 0) {
+			pa += 2*PI; 
+		}
+		pdx = cos(pa) * 5;
+		pdy = sin(pa) * 5;
 	}
 	if (key == 'd') {
-			px += 5;
+			pa += 0.1;
+			if (pa > 2*PI) {
+				pa -= 2 * PI;
+			}
+			pdx = cos(pa)*5;
+			pdy = sin(pa) * 5;
 		}
 	if (key == 'w') {
-			py -= 5;
+			px += pdx;
+			py += pdy;
 		}
 	if (key == 's') {
-			py += 5;
+			px -= pdx;
+			py -= pdy;
 		}
 	glutPostRedisplay();
 }
@@ -81,6 +101,8 @@ void init()
 	gluOrtho2D(0,1024,512,0);
 	px = 300;
 	py = 300;
+	pdx = cos(pa) * 5;
+	pdy = sin(pa) * 5;
 }
 
 int main(int argc, char *argv[])

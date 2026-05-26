@@ -3,5 +3,5 @@ executable(
   'backroom',
   'src/main.c',
   dependencies: [],
-  link_args: ['-lGL', '-lGLU', '-lglut']
+  link_args: ['-lGL', '-lGLU', '-lglut', '-lm']
 )
