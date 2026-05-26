@@ -1,20 +1,25 @@
+// import des bibliothèques nécéssaire pour les fonctions de base
+
 #include <stdlib.h>
-#include <GL/glut.h>
-#include <math.h>
+#include <GL/glut.h> // bibliothéque utilisé par opengl
+#include <math.h> // utile pour toutes les fonctions cos et sin
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
 
+//taille de la map
 #define mapX 8
 #define mapY 8
 #define mapS 64
 
+//nombre de rayon
 #define NUM_RAYS 120
 #define FOV 60
 
 #define PLAYER_RADIUS 10
 
+// description de la map
 int map[] =
 {
     1,1,1,1,1,1,1,1,
@@ -45,6 +50,8 @@ float FixAng(float a)
     return a;
 }
 
+
+//permet de dessiner la map de gauche en 2D
 void drawMap2D()
 {
     int x, y, xo, yo;
@@ -53,7 +60,7 @@ void drawMap2D()
     {
         for (x = 0; x < mapX; x++)
         {
-            if (map[y * mapX + x] == 1)
+            if (map[y * mapX + x] == 1) // si la valeur dans l'array est égal a 1 alors on affiche un carré blanc
                 glColor3f(1,1,1);
             else
                 glColor3f(0,0,0);
@@ -62,7 +69,8 @@ void drawMap2D()
             yo = y * mapS;
 
             glBegin(GL_QUADS);
-
+			
+			// tracé des vecteurs liés a la valeur de l'array
             glVertex2i(xo + 1, yo + 1);
             glVertex2i(xo + 1, yo + mapS - 1);
             glVertex2i(xo + mapS - 1, yo + mapS - 1);
@@ -73,6 +81,8 @@ void drawMap2D()
     }
 }
 
+
+// fonction qui permet de dessiner le joueur sur la map de gauche + les rayons associés a la vision
 void drawPlayer2D()
 {
     glColor3f(1,1,0);
@@ -90,6 +100,7 @@ void drawPlayer2D()
     glEnd();
 }
 
+// gestion des boutons (WASD car j'ai envie)
 void Buttons(unsigned char key, int x, int y)
 {
     float moveSpeed = 5;
@@ -144,6 +155,7 @@ void Buttons(unsigned char key, int x, int y)
     glutPostRedisplay();
 }
 
+// dessin des rayons en 2D
 void drawRays2D()
 {
     glColor3f(0,1,1);
